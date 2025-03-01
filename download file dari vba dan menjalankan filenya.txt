@@ -1,0 +1,37 @@
+Sub DownloadAndInstall()
+    Dim http As Object
+    Dim stream As Object
+    Dim filePath As String
+    Dim fileURL As String
+    Dim shell As Object
+
+    ' Tentukan URL file dan lokasi penyimpanan
+    fileURL = "https://dl.tailscale.com/stable/tailscale-setup-1.80.2.exe"
+    filePath = "C:\Users\samsul3346\Downloads\tailscale-setup-1.80.2.exe"
+
+    ' Buat objek HTTP
+    Set http = CreateObject("WinHttp.WinHttpRequest.5.1")
+    http.Open "GET", fileURL, False
+    http.Send
+
+    ' Periksa apakah unduhan berhasil (HTTP 200)
+    If http.Status = 200 Then
+        Set stream = CreateObject("ADODB.Stream")
+        stream.Type = 1 ' Binary
+        stream.Open
+        stream.Write http.ResponseBody
+        stream.SaveToFile filePath, 2 ' Overwrite jika file ada
+        stream.Close
+        
+        MsgBox "File berhasil diunduh ke " & filePath, vbInformation
+
+        ' Jalankan file installer setelah selesai diunduh
+        Set shell = CreateObject("WScript.Shell")
+        shell.Run """" & filePath & """", 1, False ' Mode 1 = normal window, False = tidak menunggu selesai
+
+        MsgBox "Installer telah dijalankan!", vbInformation
+
+    Else
+        MsgBox "Gagal mengunduh file. Status: " & http.Status, vbExclamation
+    End If
+End Sub

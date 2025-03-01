@@ -1,0 +1,10 @@
+openssl rand -base64 32 > aes.key
+
+openssl enc -aes-256-cbc -salt -in samsul.txt -out data.txt.enc -pass file:./AESKEY.key -pbkdf2
+
+openssl enc -d -aes-256-cbc -in data.txt.enc -out data_decrypted.txt -pass file:./AESKEY.key -pbkdf2
+
+openssl rand -hex 32
+e95e35b94c10014f0b82f39f3b3a3f9bdf8f2560d1d4bc5208374051b521dba1
+
+openssl enc -aes-256-cbc -salt -S E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855 -in file.txt -out file_terenskripsi.enc -pass file:./AESKEY.key -pbkdf2

